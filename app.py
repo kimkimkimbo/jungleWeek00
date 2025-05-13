@@ -1,7 +1,7 @@
 """
 """
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template
 from pymongo import MongoClient
 
 app = Flask(__name__)
