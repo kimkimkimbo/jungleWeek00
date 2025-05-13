@@ -124,9 +124,10 @@ Users
                 <label class="form-label" for="password">PW</label>
                 <input class="form-input" type="password" id="password" name="password" placeholder="비밀번호">
             </div>
+            </form>
             <button type="submit" class="btn">로그인</button>
-            <button type="button" class="btn" onclick="location.href='/signup'">회원가입</button>
-        </form>
+            <button type="button" class="btn" onclick="location.href='{{ url_for('signup') }}'">회원가입</button>
+        
     </div>
 </body>
 
