@@ -1,0 +1,44 @@
+<!--
+
+회원가입 페이지
+아이디 비밀번호 이름 정보 필수 기입
+비밀번호는 암호화 후 DB 저장
+
+Users
+{
+  "_id": ObjectId,
+  "name": “김보아”,
+  “pw”: ******,
+}
+
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+</head>
+<body>
+    <div class="container">
+        <table>
+          <tr>
+              <td><h2>회원가입</h2></td>
+          </tr>
+
+          <tr><td>이름</td></tr>
+          <tr><td><input type="text" class="text"></td></tr>
+
+        
+          <tr><td>아이디</td></tr>
+          <tr><td><input type="text" class="text"></td></tr>
+
+          <tr><td>비밀번호</td></tr>
+          <tr><td><input type="password" class="text"></td></tr>
+
+          <tr><td><input type="submit" value="회원가입" class="btn" onclick="alert('가입 성공!')"></td></tr>
+
+          </table>
+        </form>
+    </div>
+</body>
