@@ -21,26 +21,32 @@ Users
     <title>회원가입</title>
 </head>
 <body>
-    <div class="container">
-      <form action="/signup" method="POST">
-        <table>
-          <tr>
-              <td><h2>회원가입</h2></td>
-          </tr>
+  <div class="container">
+    <form action="/signup" method="POST">
+      <table>
+        <tr>
+            <td><h2>회원가입</h2></td>
+        </tr>
 
-          <tr><td>이름</td></tr>
-          <tr><td><input type="text" name = "name"class="text"></td></tr>
+        <tr><td>이름</td></tr>
+        <tr><td><input type="text" name = "name"class="text"></td></tr>
 
+      
+        <tr><td>아이디</td></tr>
+        <tr><td><input type="text" name = "user_id" class="text"></td></tr>
+
+        <tr><td>비밀번호</td></tr>
+        <tr><td><input type="password" name = "pw" class="text"></td></tr>
+
+        <tr><td><input type="submit" value="회원가입" class="btn""></td></tr>
         
-          <tr><td>아이디</td></tr>
-          <tr><td><input type="text" name = "user_id" class="text"></td></tr>
-
-          <tr><td>비밀번호</td></tr>
-          <tr><td><input type="password" name = "pw" class="text"></td></tr>
-
-          <tr><td><input type="submit" value="회원가입" class="btn""></td></tr>
-          
-          </table>
-        </form>
-    </div>
+        </table>
+      </form>
+       <!-- 오류 메시지 표시 -->
+        {% if error %}
+          <div class="error-message" style="color: red;">
+            {{ error }}
+          </div>
+        {% endif %}
+  </div>
 </body>

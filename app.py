@@ -2,15 +2,17 @@
 """
 #SSR 방식이라면 jsonify() 대신 redirect()나 render_template()를 써야 함
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from pymongo import MongoClient
-from models.user import create_user
+from models.user import create_user, get_user_by_user_id, validate_user_password
 from flask_cors import CORS
+import os 
+from bson import ObjectId  
 
 
 app = Flask(__name__)
 CORS(app) #모든 출처 허용, 매우 위험! 사용하지 않는 게 좋지만 당장 개발 편의를 위해 사용
-
+app.secret_key = os.urandom(24) #session을 사용하려면 secret_key 반드시 설정, 임의 문자열도 가능
 
 client = MongoClient('mongodb+srv://week00:250512@cluster0.vsudbri.mongodb.net/')
 db = client['dbweek00'] 
@@ -32,9 +34,22 @@ def signup():
         name = request.form['name']
         pw = request.form['pw']
         
+        #print("회원가입 시도:", user_id, name)
+        
         #회원가입 페이지에서 입력받은 데이터가 비어있지 않은지 확인
         if not user_id or not name or not pw:
             return render_template('signup.html', error='모두 입력해주세요.')
+        
+        # 중복 아이디 확인
+        if get_user_by_user_id(db, user_id):
+            return render_template('signup.html', error='이미 존재하는 아이디입니다.')
+
+        
+        # 비밀번호 길이 체크 (예: 최소 8자 이상)
+        if len(pw) < 8:
+            return render_template('signup.html', error='비밀번호는 최소 8자 이상이어야 합니다.')
+
+
     
         create_user(db, user_id, name, pw)
         
@@ -51,8 +66,31 @@ def signup():
 #로그인
 @app.route('/login', methods=['GET','POST'])
 def login():
+    if request.method == 'POST':
+
+
+        #로그인 사용자에게 입력받은 데이터를 DB에서 조회
+        user_id = request.form['user_id']
+        pw = request.form['pw']
+        
+        #로그인 페이지에서 입력받은 데이터가 비어있지 않은지 확인
+        if not user_id or not pw:
+            return render_template('login.html', error='모두 입력해주세요.')
+        
+        #DB에서 사용자 정보 조회
+        user = get_user_by_user_id(db, user_id)
+        #print('입력받은 아이디', user_id)
     
-    return render_template('login.html')
+        if user and validate_user_password(user, pw):
+            session.clear() #꼬이지 않도록 세션 초기화
+            session['user_id'] = user_id  # 세션에 사용자 ID 저장
+            session['user_oid'] = str(user['_id'])  # MongoDB 고유 ObjectId
+            
+            return redirect(url_for('home'))  # 로그인 성공 시 이동
+        else:
+                return render_template('login.html', error='아이디 또는 비밀번호가 잘못되었습니다.')
+    else:
+        return render_template('login.html')
 
 
 
