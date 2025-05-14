@@ -148,6 +148,11 @@ comment
       font-size: 18px;
       margin-left: 0;
     }
+
+    .delete-form {
+      margin-top: 20px;
+      text-align: right;
+    }
   </style>
 
   <script>
@@ -195,6 +200,18 @@ comment
 
   <div class="container">
     <div class="title">괴식쟁이들</div>
+
+    <!-- Flash 메시지 출력 -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-message">
+          {% for msg in messages %}
+            <div class="alert alert-info">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <div id="post-detail">
       <img src="" alt="이미지 넣기" class="food-image">
       <ul class="info-list">
@@ -221,6 +238,12 @@ comment
       <input type="hidden" name="post_id" value="{{post_info['_id']}}">
       <button class="comment-btn" type="submit">등록</button>
     </form>
+    <div class="delete-form">
+      <form action="{{ url_for('delete_post', id=post_info['_id']) }}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+        <button type="submit" class="btn btn-danger">삭제</button>
+      </form>
+    </div>
+</form>
   </div>
 
   <script>
@@ -247,5 +270,4 @@ comment
   </script>
 
 </body>
-
 </html>

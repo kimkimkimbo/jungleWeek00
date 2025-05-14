@@ -2,9 +2,9 @@
 """
 #SSR 방식이라면 jsonify() 대신 redirect()나 render_template()를 써야 함
 
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from pymongo import MongoClient
-from models.user import create_user, get_user_by_user_id, validate_user_password
+from models.user import create_user, get_user_by_object_id, get_user_by_user_id, validate_user_password
 from flask_cors import CORS
 import os 
 from bson import ObjectId  
@@ -97,51 +97,65 @@ def login():
 
 
 #게시물
-@app.route('/restaurant')  # 등록 페이지
-def restaurant_page():
+@app.route('/post', methods=['GET', 'POST'])
+def post_page():
+    user_id = session.get("user_id")
+    if request.method == 'POST':
+        if user_id is None:
+            flash('로그인이 필요합니다.')
+            return redirect(url_for('post_page'))
+
+        title = request.form.get('title')
+        content = request.form.get('content')
+        address = request.form.get('address')
+
+        post = {
+            'title': title,
+            'user_id': user_id,
+            'content': content,
+            'address': address
+        }
+
+        result = db.jungle.insert_one(post)
+        post_id = str(result.inserted_id)
+        flash('등록이 완료되었습니다.')
+        return redirect(url_for('detail', post_id=post_id))
+        # return redirect(url_for('home'))
+
     return render_template('add_post.html')
 
-@app.route('/restaurant/post', methods=['POST'])
-def create_restaurant():
-    user_id = session.get("user_id")
 
-    if user_id is None:
-      return jsonify({'result': 'fail', 'msg': '로그인이 필요합니다.'}), 401
-    
-    title_receive = request.form.get('title_give')
-    content_receive = request.form.get('content_give')
-    address_receive = request.form.get('address_give')
+@app.route('/post/<id>/edit', methods=['GET', 'POST'])
+def edit_post(id):
+    post = db.jungle.find_one({'_id': ObjectId(id)})
 
-    restaurant = {
-        'title': title_receive,
-        'user_id': user_id,
-        'content': content_receive,
-        'address': address_receive
-    }
+    if request.method == 'POST':
+        title = request.form.get('title')
+        content = request.form.get('content')
+        address = request.form.get('address')
 
-    db.jungle.insert_one(restaurant)
-    return jsonify({'result': 'success'})
+        db.jungle.update_one(
+            {'_id': ObjectId(id)},
+            {'$set': {
+                'title': title,
+                'content': content,
+                'address': address
+            }}
+        )
 
-@app.route('/restaurant/<id>/edit')  # 수정 페이지
-def edit_restaurant_page(id):
-    restaurant = db.jungle.find_one({'_id': ObjectId(id)})
-    return render_template('edit_post.html', restaurant=restaurant)
+        flash('수정이 완료되었습니다.')
+        return redirect(url_for('detail', post_id=id))
+        # return redirect(url_for('home'))
 
-@app.route('/restaurant/<id>/update', methods=['POST'])
-def edit_restaurant(id):
-    title_receive = request.form['title_give']
-    content_receive = request.form['content_give']
-    address_receive = request.form['address_give']
+    return render_template('edit_post.html', post=post)
 
-    db.jungle.update_one(
-        {'_id': ObjectId(id)},
-        {'$set': {
-            'title': title_receive,
-            'content': content_receive,
-            'address': address_receive
-        }}
-    )
-    return jsonify({'result': 'success'})
+
+@app.route('/post/<id>/delete', methods=['POST'])
+def delete_post(id):
+    result = db.jungle.delete_one({'_id': ObjectId(id)})
+    return redirect(url_for('home'))
+
+
 
 #로그아웃
 @app.route('/logout', methods=['GET'])
@@ -149,10 +163,73 @@ def logout():
     session.pop('user_id', None)
     session.pop('user_oid', None)
     return redirect(url_for('home'))
-#북마크
-@app.route('/bookmark', methods = ['GET', 'POST'])
+
+
+
+# 북마크 페이지 렌더링 (SSR 방식)
+@app.route('/bookmark', methods=['GET'])
 def bookmark():
-    return render_template('bookmarkpage.html')
+    # 로그인 검증
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    
+    
+    # 사용자 정보 가져오기
+    user = get_user_by_object_id(db, session['user_oid'])
+    
+    
+    # 북마크한 게시물 ID 리스트
+    bookmark_ids = user.get('bookmarks', [])  # 'bookmarks' 필드명 확인!
+    
+    # 북마크한 게시물 전체 조회
+    posts = list(db.posts.find({'_id': {'$in': bookmark_ids}}))
+    
+    # 템플릿에 posts 넘겨서 렌더링
+    return render_template('bookmarkpage.html', posts=posts)
+
+
+#사용자 UX 경험을 고려했을 때 AJAX로 구현하는 것이 좋음
+#SSR로 구현 시 -> 즐겨찾기 누를 때마다 페이지 전체 새로고침 , flash()띄우면 북마크 페이지로 리디렉션되어야만 사용자에게 보여짐 -> 당장 나가고 싶은 UX됨....
+@app.route('/add_bookmark', methods=['POST'])
+def add_bookmark():
+    
+    # 로그인 되어 있지 않으면 로그인 페이지로 리디렉션
+    if 'user_id' not in session:
+        return jsonify({'result': 'fail', 'msg': '로그인이 필요합니다.'}), 401
+    
+    # 클라이언트로부터 post_id를 받아옴
+    post_id = request.form.get('post_id')
+    if not post_id:
+        return jsonify({'result': 'fail', 'msg': 'post_id가 필요합니다.'}), 400
+    
+    # post_id를 ObjectId로 변환 (MongoDB용)
+    try:
+        post_oid = ObjectId(post_id)
+    except Exception:
+        return jsonify({'error': '유효하지 않은 post_id입니다.'}), 400
+    
+    # 사용자 정보 불러오기
+    user_oid = session['user_oid']
+    user = db.users.find_one({'_id': ObjectId(user_oid)})
+    
+    
+    # 북마크 필드가 없으면 빈 리스트로 초기화
+    bookmarks = user.get('bookmarks', [])
+    
+    
+    # 이미 북마크한 게시물인지 확인
+    if post_oid in bookmarks:
+        return jsonify({'error': '이미 북마크한 게시물입니다.'}), 409
+    
+    
+    # 중복 없이 북마크 추가
+    db.users.update_one(
+        {'_id': ObjectId(user_oid)},
+        {'$addToSet': {'bookmarks': post_oid}}  # 중복 없이 추가
+    )
+    return jsonify({'message': '북마크 추가됨'})
+
+
 
 #상세 페이지
 @app.route('/detail/<post_id>')
@@ -177,4 +254,3 @@ def review():
 
 if __name__ == '__main__':  
    app.run('0.0.0.0', port=5001, debug=True)
-

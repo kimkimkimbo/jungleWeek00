@@ -58,7 +58,7 @@ main page
             {% if session.get('user_id') %} <!-- 세션에 user_id가 있으면 로그인 상태 -->
             <button class="bookmark-btn" onclick="location.href = '{{url_for('bookmark')}}'"> 즐겨찾기 </button>
             <!--add_post로 이동-->
-            <button class="post-btn" onclick="location.href = '{{url_for('restaurant_page')}}'"> 글작성 </button>
+            <button class="post-btn" onclick="location.href = '{{url_for('post_page')}}'"> 글작성 </button>
             <!--로그아웃-->
             <button class="logout-btn" onclick="location.href = '{{url_for('logout')}}'"> 로그아웃 </button>
             {% else %}
@@ -101,5 +101,4 @@ main page
         </div>
     </div>
 </body>
-
 </html>
