@@ -25,21 +25,57 @@ main page
 
     <!-- 구글폰트 -->
     <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
+    <script>
+        $(document).ready(function () {
+            $("#post-list").html("");
+            show_post_card();
+        });
+
+        function show_post_card() {
+            let post_html = `
+            {% for info in info_list %}
+            <a class="card" href="{{url_for('detail', post_id=info._id)}}">
+                <div class="card-image"></div>
+                <div class="corner-icon">☆</div>
+                <div class="card-title">{{info.title}}</div>
+                <div class="card-likes"><span class="like-icon">&#128077;</span>90</div>
+            </div>
+            {% endfor %}
+            `;
+            $('#post-list').append(post_html);
+
+        }
+    </script>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
             <span class="title">괴식쟁이들</span>
+            {% if session.get('user_id') %} <!-- 세션에 user_id가 있으면 로그인 상태 -->
+            <button class="bookmark-btn" onclick="location.href = '{{url_for('bookmark')}}'"> 즐겨찾기 </button>
+            <!--add_post로 이동-->
+            <button class="post-btn" onclick="location.href = '{{url_for('restaurant_page')}}'"> 글작성 </button>
+            <!--로그아웃-->
+            <button class="logout-btn" onclick="location.href = '{{url_for('logout')}}'"> 로그아웃 </button>
+            {% else %}
+            <!--vs code에서 js로 인식해서 나는 오류 실행할 때 문제 없음-->
             <button class="login-btn" onclick="location.href='{{ url_for('login') }}'">로그인</button>
+            <!--비회원일 땐 즐겨찾기 버튼 숨기기-->
+            <style>
+                .corner-icon {
+                    display: none;
+                }
+            </style>
+            {% endif %}
         </div>
         <div class="search-box">
             <input type="text" placeholder="검색어를 입력하세요">
         </div>
-        <div class="card-grid">
+        <div class="card-grid" id="post-list">
             <!-- 카드 1 -->
             <div class="card">
                 <div class="card-image"></div>
@@ -61,9 +97,8 @@ main page
                 <div class="card-title">식당 이름</div>
                 <div class="card-likes"><span class="like-icon">&#128077;</span>90</div>
             </div>
-            
+
         </div>
     </div>
 </body>
-
 </html>
