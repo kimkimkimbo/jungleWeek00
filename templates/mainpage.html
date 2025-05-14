@@ -34,11 +34,31 @@ main page
     <div class="container">
         <div class="header">
             <span class="title">괴식쟁이들</span>
+            {% if session.get('user_id') %} <!-- 세션에 user_id가 있으면 로그인 상태 -->
+                <button class="bookmark-btn" onclick="location.href = '{{url_for('bookmark')}}'"> 즐겨찾기 </button>
+                
+                <!--add_post로 이동-->
+                <button class="post-btn" onclick="location.href = '{{url_for('bookmark')}}'"> 글작성 </button>
+
+                <!--로그아웃-->
+                <button class="logout-btn" onclick="location.href = '{{url_for('logout')}}'"> 로그아웃 </button>
+
+            {% else %}
+                <!--vs code에서 js로 인식해서 나는 오류 실행할 때 문제 없음-->
             <button class="login-btn" onclick="location.href='{{ url_for('login') }}'">로그인</button>
+            
+            <!--비회원일 땐 즐겨찾기 버튼 숨기기-->
+            <style> .corner-icon {display: none; }</style>
+            {% endif %}
+            
         </div>
         <div class="search-box">
             <input type="text" placeholder="검색어를 입력하세요">
         </div>
+        <!-- DB에 등록된 post 데이터 전체에 제목 가지고 오기-->
+        <!--card grid로 post 데이터 표현 / card 클릭 시 상세 페이지로 이동-->
+        <!--즐겨찾기 버튼 클릭시 해당 게시물을 회원 bookmark에 추가-->
+
         <div class="card-grid">
             <!-- 카드 1 -->
             <div class="card">
@@ -50,7 +70,7 @@ main page
             <!-- 카드 2 -->
             <div class="card">
                 <div class="card-image"></div>
-                <div class="corner-icon">☆</div>
+                <button class="bookmark-btn" >☆</button>
                 <div class="card-title">식당 이름</div>
                 <div class="card-likes"><span class="like-icon">&#128077;</span>90</div>
             </div>

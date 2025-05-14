@@ -84,7 +84,7 @@ def login():
         if user and validate_user_password(user, pw):
             session.clear() #꼬이지 않도록 세션 초기화
             session['user_id'] = user_id  # 세션에 사용자 ID 저장
-            session['user_oid'] = str(user['_id'])  # MongoDB 고유 ObjectId
+            session['user_oid'] = str(user['_id'])  # MongoDB 고유 ObjectId 
             
             return redirect(url_for('home'))  # 로그인 성공 시 이동
         else:
@@ -93,12 +93,23 @@ def login():
         return render_template('login.html')
 
 
+#로그아웃
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('user_id', None) 
+    session.pop('user_oid', None)
+    return redirect(url_for('home'))
+
 
 #게시물
 
 #댓글
 
 #북마크
+@app.route('/bookmark', methods = ['GET', 'POST'])
+def bookmark():
+    return render_template('bookmarkpage.html')
+
 
 #추천
 
