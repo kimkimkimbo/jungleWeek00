@@ -148,6 +148,11 @@ comment
       font-size: 18px;
       margin-left: 0;
     }
+
+    .delete-form {
+      margin-top: 20px;
+      text-align: right;
+    }
   </style>
 
   <script>
@@ -233,6 +238,12 @@ comment
       <input type="hidden" name="post_id" value="{{post_info['_id']}}">
       <button class="comment-btn" type="submit">등록</button>
     </form>
+    <div class="delete-form">
+      <form action="{{ url_for('delete_post', id=post_info['_id']) }}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+        <button type="submit" class="btn btn-danger">삭제</button>
+      </form>
+    </div>
+</form>
   </div>
 
   <script>

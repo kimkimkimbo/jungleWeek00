@@ -153,10 +153,6 @@ def edit_post(id):
 @app.route('/post/<id>/delete', methods=['POST'])
 def delete_post(id):
     result = db.jungle.delete_one({'_id': ObjectId(id)})
-    if result.deleted_count == 1:
-        flash('삭제가 완료되었습니다.')
-    else:
-        flash('삭제할 게시글이 존재하지 않습니다.')
     return redirect(url_for('home'))
 
 
