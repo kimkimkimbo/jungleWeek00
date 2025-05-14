@@ -28,6 +28,15 @@ function postRestaurant() {
       } else {
         alert("서버 오류!");
       }
+    },
+    error: function (xhr) {
+      // 서버에서 HTTP 에러 응답 (예: 401, 500 등)을 보낸 경우
+      if (xhr.status === 401) {
+        alert("로그인이 필요합니다.");
+        window.location.href = '/login';  // 로그인 페이지로 이동할 수도 있음
+      } else {
+        alert("알 수 없는 오류가 발생했습니다. 다시 시도해 주세요.");
+      }
     }
   });
 }
