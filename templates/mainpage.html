@@ -26,146 +26,56 @@ main page
     <!-- 구글폰트 -->
     <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
 
-    <style>
-        body {
-            font-family: 'Malgun Gothic', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #fff;
-        }
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-        .container {
-            width: 900px;
-            margin: 30px auto;
-            border: 4px solid #222;
-            padding: 40px 30px 50px 30px;
-            box-sizing: border-box;
-            background: #fff;
-        }
+    <script>
+        $(document).ready(function () {
+            $("#post-list").html("");
+            show_post_card();
+        });
 
-        .header {
-            position: relative;
-            height: 60px;
-            margin-bottom: 40px;
-        }
+        function show_post_card() {
+            let post_html = `
+            {% for info in info_list %}
+            <a class="card" href="{{url_for('detail', post_id=info._id)}}">
+                <div class="card-image"></div>
+                <div class="corner-icon">☆</div>
+                <div class="card-title">{{info.title}}</div>
+                <div class="card-likes"><span class="like-icon">&#128077;</span>90</div>
+            </div>
+            {% endfor %}
+            `;
+            $('#post-list').append(post_html);
 
-        .title {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-            font-weight: bold;
-            letter-spacing: 3px;
-            text-align: center;
         }
-
-        .login-btn {
-            border: 2px solid #222;
-            background: #fff;
-            border-radius: 5px;
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            margin: 0 auto 40px auto;
-            width: 60%;
-            border: 2px solid #222;
-            border-radius: 6px;
-            padding: 8px 15px;
-            box-sizing: border-box;
-            background: #fff;
-        }
-
-        .search-box input {
-            border: none;
-            outline: none;
-            width: 100%;
-            font-size: 20px;
-            background: transparent;
-        }
-
-        .search-icon {
-            font-size: 22px;
-            margin-right: 10px;
-            color: #444;
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px 24px;
-            margin-top: 30px;
-        }
-
-        .card {
-            border: 3px solid #222;
-            border-radius: 8px;
-            padding: 15px 10px 10px 10px;
-            background: #fff;
-            position: relative;
-            min-height: 180px;
-        }
-
-        .card-image {
-            width: 100%;
-            height: 70px;
-            background: #eee;
-            border: 2px solid #222;
-            border-radius: 4px;
-            margin-bottom: 8px;
-            position: relative;
-        }
-
-        .corner-icon {
-            position: absolute;
-            top: 20px;
-            right: 18px;
-            width: 22px;
-            height: 22px;
-            background: #fff;
-            border: 2px solid #222;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 15px;
-            line-height: 20px;
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 0;
-        }
-
-        .card-likes {
-            font-size: 17px;
-            margin-top: 2px;
-            display: flex;
-            align-items: center;
-        }
-
-        .like-icon {
-            font-size: 18px;
-            margin-right: 5px;
-        }
-    </style>
+    </script>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
             <span class="title">괴식쟁이들</span>
+            {% if session.get('user_id') %} <!-- 세션에 user_id가 있으면 로그인 상태 -->
+            <button class="bookmark-btn" onclick="location.href = '{{url_for('bookmark')}}'"> 즐겨찾기 </button>
+            <!--add_post로 이동-->
+            <button class="post-btn" onclick="location.href = '{{url_for('restaurant_page')}}'"> 글작성 </button>
+            <!--로그아웃-->
+            <button class="logout-btn" onclick="location.href = '{{url_for('logout')}}'"> 로그아웃 </button>
+            {% else %}
+            <!--vs code에서 js로 인식해서 나는 오류 실행할 때 문제 없음-->
             <button class="login-btn" onclick="location.href='{{ url_for('login') }}'">로그인</button>
+            <!--비회원일 땐 즐겨찾기 버튼 숨기기-->
+            <style>
+                .corner-icon {
+                    display: none;
+                }
+            </style>
+            {% endif %}
         </div>
         <div class="search-box">
             <input type="text" placeholder="검색어를 입력하세요">
         </div>
-        <div class="card-grid">
+        <div class="card-grid" id="post-list">
             <!-- 카드 1 -->
             <div class="card">
                 <div class="card-image"></div>
@@ -187,7 +97,7 @@ main page
                 <div class="card-title">식당 이름</div>
                 <div class="card-likes"><span class="like-icon">&#128077;</span>90</div>
             </div>
-            
+
         </div>
     </div>
 </body>
