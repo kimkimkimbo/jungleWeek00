@@ -63,4 +63,5 @@ def get_user_by_object_id(db, object_id_str):
         object_id = ObjectId(object_id_str)
         return db.users.find_one({"_id": object_id})
     except:
+
         return None  # 잘못된 ID 형식이면 None 반환
