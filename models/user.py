@@ -1,9 +1,29 @@
 
 
+from flask import render_template
 from pymongo import MongoClient
 from werkzeug.security import check_password_hash  # 비밀번호 검증 함수
 from werkzeug.security import generate_password_hash #비밀번호 해시화! 암호화 해야 함
 from bson import ObjectId 
+
+
+
+
+
+#가입 정보 입력 제한 사항
+def validate_user_info(db, user_id, name, pw):
+    #회원가입 페이지에서 입력받은 데이터가 비어있지 않은지 확인
+        if not user_id or not name or not pw:
+            return render_template('signup.html', error='모두 입력해주세요.')
+        
+        # 중복 아이디 확인
+        if get_user_by_user_id(db, user_id):
+            return render_template('signup.html', error='이미 존재하는 아이디입니다.')
+
+        
+        # 비밀번호 길이 체크 (예: 최소 8자 이상)
+        if len(pw) < 8:
+            return render_template('signup.html', error='비밀번호는 최소 8자 이상이어야 합니다.')
 
 
 #사용자 정보 저장

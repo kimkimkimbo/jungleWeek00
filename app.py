@@ -4,7 +4,8 @@
 
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from pymongo import MongoClient
-from models.user import create_user, get_user_by_object_id, get_user_by_user_id, validate_user_password
+from models.post import add_bookmark_if_not_exists, get_valid_post_oid
+from models.user import create_user, get_user_by_object_id, get_user_by_user_id, validate_user_password, validate_user_info
 from flask_cors import CORS
 import os 
 from bson import ObjectId  
@@ -37,21 +38,8 @@ def signup():
         
         #print("회원가입 시도:", user_id, name)
         
-        #회원가입 페이지에서 입력받은 데이터가 비어있지 않은지 확인
-        if not user_id or not name or not pw:
-            return render_template('signup.html', error='모두 입력해주세요.')
-        
-        # 중복 아이디 확인
-        if get_user_by_user_id(db, user_id):
-            return render_template('signup.html', error='이미 존재하는 아이디입니다.')
+        validate_user_info(db, user_id, name, pw)
 
-        
-        # 비밀번호 길이 체크 (예: 최소 8자 이상)
-        if len(pw) < 8:
-            return render_template('signup.html', error='비밀번호는 최소 8자 이상이어야 합니다.')
-
-
-    
         create_user(db, user_id, name, pw)
         
         #SSR 방식이라면 jsonify() 대신 redirect()나 render_template()를 써야 함
@@ -181,18 +169,10 @@ def add_bookmark():
     # 로그인 되어 있지 않으면 로그인 페이지로 리디렉션
     if 'user_id' not in session:
         return jsonify({'result': 'fail', 'msg': '로그인이 필요합니다.'}), 401
-
-    # 클라이언트로부터 post_id를 받아옴
-    post_id = request.form.get('post_id')
-    if not post_id:
-        return jsonify({'result': 'fail', 'msg': 'post_id가 필요합니다.'}), 400
-
-    # post_id를 ObjectId로 변환 (MongoDB용)
-    try:
-        post_oid = ObjectId(post_id)
-    except Exception:
-        return jsonify({'error': '유효하지 않은 post_id입니다.'}), 400
-
+    
+    post_oid = get_valid_post_oid(db)
+    print('post_oid:', post_oid)
+    
     # 사용자 정보 불러오기
     user_oid = session['user_oid']
     user = db.users.find_one({'_id': ObjectId(user_oid)})
@@ -200,15 +180,7 @@ def add_bookmark():
     # 북마크 필드가 없으면 빈 리스트로 초기화
     bookmarks = user.get('bookmarks', [])
 
-    # 이미 북마크한 게시물인지 확인
-    if post_oid in bookmarks:
-        return jsonify({'error': '이미 북마크한 게시물입니다.'}), 409
-
-    # 중복 없이 북마크 추가
-    db.users.update_one(
-        {'_id': ObjectId(user_oid)},
-        {'$addToSet': {'bookmarks': post_oid}}  # 중복 없이 추가
-    )
+    add_bookmark_if_not_exists(db, user_oid, post_oid, bookmarks)
 
     return jsonify({'message': '북마크 추가됨'})
 
