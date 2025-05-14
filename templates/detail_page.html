@@ -195,6 +195,18 @@ comment
 
   <div class="container">
     <div class="title">괴식쟁이들</div>
+
+    <!-- Flash 메시지 출력 -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-message">
+          {% for msg in messages %}
+            <div class="alert alert-info">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <div id="post-detail">
       <img src="" alt="이미지 넣기" class="food-image">
       <ul class="info-list">
