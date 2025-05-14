@@ -44,24 +44,36 @@ post
 <body>
   <div class="container">
     <div class="title">괴식쟁이들</div>
-    <form>
+
+    <!-- flash 메시지 표시 영역 -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-message">
+          {% for msg in messages %}
+            <div class="alert alert-info">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('post_page') }}">
       <div class="form-group">
-        <label class="form-label" for="restaurant">식당 이름</label>
-        <input class="form-input" type="text" id="restaurant" name="restaurant" autocomplete="off" placeholder="식당 이름을 입력해 주세요.">
+        <label class="form-label" for="title">식당 이름</label>
+        <input class="form-input" type="text" id="title" name="title" autocomplete="off" placeholder="식당 이름을 입력해 주세요.">
       </div>
       <div class="form-group">
-        <label class="form-label" for="comment">Comment</label>
-        <textarea class="form-textarea" id="comment" name="comment" placeholder="내용을 입력해 주세요."></textarea>
+        <label class="form-label" for="content">Comment</label>
+        <textarea class="form-textarea" id="content" name="content" placeholder="내용을 입력해 주세요."></textarea>
       </div>
       <div class="form-group">
-        <label class="form-label" for="location">식당 위치</label>
-        <div class="location-group">
-          <input class="location-input" type="text" id="location" name="location" autocomplete="off" placeholder="주소를 입력해 주세요.">
+        <label class="form-label" for="address">식당 위치</label>
+        <div class="address-group">
+          <input class="address-input" type="text" id="address" name="address" autocomplete="off" placeholder="주소를 입력해 주세요.">
         </div>
       </div>
       <div class="map-box">지도</div>
+      <button type="submit" class="btn btn-primary save-btn">저장</button>
     </form>
-    <button type="button" class="btn btn-primary save-btn" onclick="postRestaurant()" type="button">저장</button>
   </div>
 </body>
 

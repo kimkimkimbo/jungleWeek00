@@ -1,5 +1,5 @@
 <!--
-게시물을 수정정하는 페이지입니다.
+게시물을 수정하는 페이지입니다.
 게시물 제목, 내용을 받습니다. 제목은 필수 입력 사항
 게시물 내용은 필수 입력 사항이 아닙니다.
 게시물 제목은 100자 이내로 입력해야 합니다.
@@ -146,24 +146,36 @@ post
 <body>
   <div class="container">
     <div class="title">괴식쟁이들</div>
-    <form>
+
+    <!-- Flash 메시지 출력 -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-message">
+          {% for msg in messages %}
+            <div class="alert alert-info">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('edit_post', id=post._id) }}">
       <div class="form-group">
-        <label class="form-label" for="restaurant">식당 이름</label>
-        <input class="form-input" type="text" id="restaurant" name="restaurant" value="{{ restaurant.title if restaurant else '' }}" autocomplete="off" placeholder="식당 이름을 입력해 주세요.">
+        <label class="form-label" for="title">식당 이름</label>
+        <input class="form-input" type="text" id="title" name="title" value="{{ post.title }}" autocomplete="off" placeholder="식당 이름을 입력해 주세요.">
       </div>
       <div class="form-group">
-        <label class="form-label" for="comment">Comment</label>
-        <textarea class="form-textarea" id="comment" name="comment" placeholder="내용을 입력해 주세요.">{{ restaurant.content if restaurant else '' }}</textarea>
+        <label class="form-label" for="content">Comment</label>
+        <textarea class="form-textarea" id="content" name="content" placeholder="내용을 입력해 주세요.">{{ post.content }}</textarea>
       </div>
       <div class="form-group">
-        <label class="form-label" for="location">식당 위치</label>
-        <div class="location-group">
-          <input class="location-input" type="text" id="location" name="location" value="{{ restaurant.address if restaurant else '' }}" autocomplete="off" placeholder="주소를 입력해 주세요.">
+        <label class="form-label" for="address">식당 위치</label>
+        <div class="address-group">
+          <input class="address-input" type="text" id="address" name="address" value="{{ post.address }}" autocomplete="off" placeholder="주소를 입력해 주세요.">
         </div>
       </div>
       <div class="map-box">지도</div>
+      <button type="submit" class="btn btn-primary save-btn">수정</button>
     </form>
-    <button type="button" class="btn btn-primary save-btn" onclick="editRestaurant('{{ restaurant._id }}')">수정</button>
   </div>
 </body>
 
