@@ -43,10 +43,6 @@ comment
     integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
     crossorigin="anonymous"></script>
 
-  <!-- 네이버 지도 api -->
-  <script type="text/javascript"
-    src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=u65iupd99z&submodules=geocoder"></script>
-
   <!-- 구글폰트 -->
   <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
   <title>괴식쟁이들 상세페이지</title>
@@ -114,8 +110,8 @@ comment
     }
 
     .map-box {
-      width: 400px;
-      height: 300px;
+      width: 340px;
+      height: 80px;
       border: 3px solid #111;
       display: flex;
       align-items: center;
@@ -149,103 +145,30 @@ comment
       margin-left: 0;
     }
   </style>
-
-  <script>
-    $(document).ready(function () {
-      $("#post-detail").html("");
-      $("#reviews").html("");
-
-      show_post();
-      show_reviews();
-    });
-
-    function show_post() {
-      let post_html = `
-      <div id="post-detail">
-        <img src="" alt="이미지 넣기" class="food-image">
-        <ul class="info-list">
-          <li>{{post_info.title}}</li>
-          <li><span class="like-icon">&#128077;</span>90</li>
-          <li>
-            COMMENT
-            <span class="comment">{{post_info.content}}</span>
-          </li>
-          <li class="map-section">
-            위치
-            <div id="map" class="map-box"></div>
-          </li>
-        </ul>
-  `;
-      $('#post-detail').append(post_html);
-    }
-    function show_reviews() {
-      let reviews_html = `
-        {% for review in reviews %}
-          <div class="review-content">{{review}}</div>
-        {% endfor %}
-      `;
-      $('#reviews').append(reviews_html);
-    }
-
-  </script>
-
 </head>
 
 <body>
-
   <div class="container">
     <div class="title">괴식쟁이들</div>
-    <div id="post-detail">
-      <img src="" alt="이미지 넣기" class="food-image">
-      <ul class="info-list">
-        <li>식당 이름</li>
-        <li><span class="like-icon">&#128077;</span>90</li>
-        <li>
-          COMMENT
-          <span class="comment">추천해요~</span>
-        </li>
-        <li class="map-section">
-          위치
-          <div id="map" class="map-box"></div>
-
-        </li>
-      </ul>
-    </div>
+    <div class="food-image">음식사진</div>
+    <ul class="info-list">
+      <li>식당 이름</li>
+      <li><span class="like-icon">&#128077;</span>90</li>
+      <li>
+        COMMENT
+        <span class="comment">추천해요~</span>
+      </li>
+      <li class="map-section">
+        위치
+        <div class="map-box">지도</div>
+      </li>
+    </ul>
     <hr class="divider">
-    <div class="review-title">Review</div>
-    <div class="review-box" id="reviews">
+    <div class="review-title">· Review</div>
+    <div class="review-box">
       <div class="review-content">맛있어요!</div>
     </div>
-    <form class="comment-form" action="/review" method="POST">
-      <input class="comment-input" type="text" name="review" placeholder="댓글을 입력하세요">
-      <input type="hidden" name="post_id" value="{{post_info['_id']}}">
-      <button class="comment-btn" type="submit">등록</button>
-    </form>
   </div>
-
-  <script>
-    naver.maps.Service.geocode({ query: '{{post_info.address}}' }, function (status, response) {
-      if (status === naver.maps.Service.Status.ERROR) {
-        return alert('지도 불러오기 실패!');
-      }
-
-      var result = response.v2, // 검색 결과의 컨테이너
-        items = result.addresses; // 검색 결과의 배열
-
-      var mapOptions = {
-        center: new naver.maps.LatLng(items[0]['y'], items[0]['x']),
-        zoom: 15
-      };
-      var map = new naver.maps.Map('map', mapOptions);
-
-      var marker = new naver.maps.Marker({
-        position: new naver.maps.LatLng(items[0]['y'], items[0]['x']),
-        map: map
-      });
-
-    });
-  </script>
-
 </body>
 
 </html>
