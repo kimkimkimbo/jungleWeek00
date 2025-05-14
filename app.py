@@ -18,10 +18,12 @@ client = MongoClient('mongodb+srv://week00:250512@cluster0.vsudbri.mongodb.net/'
 db = client['dbweek00'] 
 
 
-
 @app.route('/')
 def home():
-    return render_template('mainpage.html')
+    info_list = list(db.jungle.find({}))
+    for info in info_list:
+        info['_id'] = str(info['_id'])
+    return render_template('mainpage.html', info_list=info_list)
 
 
 
@@ -117,12 +119,12 @@ def create_restaurant():
         'address': address_receive
     }
 
-    db.restaurant.insert_one(restaurant)
+    db.jungle.insert_one(restaurant)
     return jsonify({'result': 'success'})
 
 @app.route('/restaurant/<id>/edit')  # 수정 페이지
 def edit_restaurant_page(id):
-    restaurant = db.restaurant.find_one({'_id': ObjectId(id)})
+    restaurant = db.jungle.find_one({'_id': ObjectId(id)})
     return render_template('edit_post.html', restaurant=restaurant)
 
 @app.route('/restaurant/<id>/update', methods=['POST'])
@@ -131,7 +133,7 @@ def edit_restaurant(id):
     content_receive = request.form['content_give']
     address_receive = request.form['address_give']
 
-    db.restaurant.update_one(
+    db.jungle.update_one(
         {'_id': ObjectId(id)},
         {'$set': {
             'title': title_receive,
@@ -141,13 +143,38 @@ def edit_restaurant(id):
     )
     return jsonify({'result': 'success'})
 
-#댓글
-
+#로그아웃
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.pop('user_id', None)
+    session.pop('user_oid', None)
+    return redirect(url_for('home'))
 #북마크
+@app.route('/bookmark', methods = ['GET', 'POST'])
+def bookmark():
+    return render_template('bookmarkpage.html')
+
+#상세 페이지
+@app.route('/detail/<post_id>')
+def detail(post_id):
+    post_info = db.jungle.find_one({'_id':ObjectId(post_id)})
+    review_dict = list(db.comment.find({'post_id':str(post_info['_id'])},{'_id':0, 'post_id':0}))
+    reviews = [[*v.values()][0] for v in review_dict]
+
+
+    return render_template('detail_page.html', post_info=post_info, reviews=reviews)
+
+@app.route('/review', methods=['POST'])
+def review():
+    post_id = request.form['post_id']
+    review = request.form['review']
+    db.comment.insert_one({'post_id':post_id, 'content':review})
+
+    return redirect(url_for('detail', post_id=post_id))
 
 #추천
 
 
 if __name__ == '__main__':  
-   app.run('0.0.0.0', port=5000, debug=True)
+   app.run('0.0.0.0', port=5001, debug=True)
 
