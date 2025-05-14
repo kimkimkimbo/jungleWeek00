@@ -4,11 +4,13 @@ Users
   "_id": ObjectId,
   "name": “김보아”,
   “pw”: ******,
+  "post_id": ObjectId //즐겨찾기 게시물 아이디
 }
 
 """
+
 #사용자 정보를 데이터베이스에 저장하는 함수
-def create_user(db, user_id, name, pw):
+def create_user(db, name, pw):
     """
     db: MongoDB 데이터베이스 객체
     name: 사용자 이름
@@ -17,11 +19,10 @@ def create_user(db, user_id, name, pw):
     post_id: 즐겨찾기 게시물 아이디
     """
     user = {
-        "user_id": name,  # 사용자 ID는 이름으로 설정
         "name": name,
         "pw": pw,
+        "post_id": None  # 초기값은 None으로 설정
     }
-
     result = db.users.insert_one(user)
     return str(result.inserted_id)
   
@@ -35,3 +36,7 @@ def get_user(db, user_id):
     """
     user = db.users.find_one({"_id": user_id})
     return user
+  
+
+  
+  
