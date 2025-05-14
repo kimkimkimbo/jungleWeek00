@@ -57,7 +57,7 @@ post
       {% endif %}
     {% endwith %}
 
-    <form method="POST" action="{{ url_for('edit_post', id=post._id) }}">
+    <form method="POST" action="{{ url_for('edit_post', id=post._id) }}" enctype="multipart/form-data">
       <div class="form-group">
         <label class="form-label" for="title">식당 이름</label>
         <input class="form-input" type="text" id="title" name="title" value="{{ post.title }}" autocomplete="off" placeholder="식당 이름을 입력해 주세요.">
@@ -71,6 +71,9 @@ post
         <div class="address-group">
           <input class="address-input form-textarea" type="text" id="address" name="address" value="{{ post.address }}" autocomplete="off" placeholder="주소를 입력해 주세요.">
         </div>
+      </div>
+      <div>
+        <input type="file" name="image">
       </div>
       <button type="submit" class="btn btn-primary save-btn">수정</button>
     </form>
