@@ -7,10 +7,10 @@ from bson import ObjectId
 
 app = Flask(__name__)
 
-client = MongoClient('localhost', 27017)
-db = client.jungle
-# client = MongoClient('mongodb+srv://week00:250512@cluster0.vsudbri.mongodb.net/')
-# db = client['dbweek00'] 
+# client = MongoClient('localhost', 27017)
+# db = client.jungle
+client = MongoClient('mongodb+srv://week00:250512@cluster0.vsudbri.mongodb.net/')
+db = client['dbweek00'] 
 
 
 @app.route('/')
@@ -35,7 +35,7 @@ def create_restaurant():
 
     restaurant = {
         'title': title_receive,
-        'user_id': ObjectId('68239775736f481afd9cfce2'),
+        'user_id': ObjectId(),
         'content': content_receive,
         'address': address_receive
     }
