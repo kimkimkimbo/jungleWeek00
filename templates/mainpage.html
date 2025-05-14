@@ -38,7 +38,7 @@ main page
             let post_html = `
             {% for info in info_list %}
             <a class="card" href="{{url_for('detail', post_id=info._id)}}">
-                <div class="card-image"></div>
+                <img class="card-image" src="data:image/png;base64,{{ info['image'] }}" alt="이미지 없음">
                 <div class="corner-icon">☆</div>
                 <div class="card-title">{{info.title}}</div>
                 <div class="card-likes"><span class="like-icon">&#128077;</span>90</div>

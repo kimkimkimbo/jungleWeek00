@@ -170,7 +170,7 @@ comment
     function show_post() {
       let post_html = `
       <div id="post-detail">
-        <img src="" alt="이미지 넣기" class="food-image">
+        <img src="data:image/png;base64,{{ post_info['image'] }}" alt="이미지 없음" class="food-image">
         <ul class="info-list">
           <li>{{post_info.title}}</li>
           <li><span class="like-icon">&#128077;</span>90</li>
@@ -206,17 +206,17 @@ comment
 
     <!-- Flash 메시지 출력 -->
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div class="flash-message">
-          {% for msg in messages %}
-            <div class="alert alert-info">{{ msg }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
+    {% if messages %}
+    <div class="flash-message">
+      {% for msg in messages %}
+      <div class="alert alert-info">{{ msg }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 
     <div id="post-detail">
-      <img src="" alt="이미지 넣기" class="food-image">
+      <img src="data:image/png;base64,{{ post_info['image'] }}" alt="이미지 넣기" class="food-image">
       <ul class="info-list">
         <li>식당 이름</li>
         <li><span class="like-icon">&#128077;</span>90</li>
@@ -244,11 +244,12 @@ comment
     <div class="post-actions">
       <a href="{{ url_for('home') }}" class="btn btn-dark">목록</a>
       <a href="{{ url_for('edit_post', id=post_info['_id']) }}" class="btn btn-primary">수정</a>
-      <form action="{{ url_for('delete_post', id=post_info['_id']) }}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+      <form action="{{ url_for('delete_post', id=post_info['_id']) }}" method="POST"
+        onsubmit="return confirm('정말 삭제하시겠습니까?');">
         <button type="submit" class="btn btn-danger">삭제</button>
       </form>
     </div>
-</form>
+    </form>
   </div>
 
   <script>
@@ -275,4 +276,5 @@ comment
   </script>
 
 </body>
+
 </html>

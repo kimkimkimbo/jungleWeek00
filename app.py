@@ -7,7 +7,8 @@ from pymongo import MongoClient
 from models.user import create_user, get_user_by_object_id, get_user_by_user_id, validate_user_password
 from flask_cors import CORS
 import os 
-from bson import ObjectId  
+from bson import ObjectId
+import base64
 
 
 app = Flask(__name__)
@@ -108,12 +109,18 @@ def post_page():
         title = request.form.get('title')
         content = request.form.get('content')
         address = request.form.get('address')
+        file = request.files['image']
+
+        if file:
+            img_bytes = file.read()
+            img_64 = base64.b64encode(img_bytes).decode('utf-8')
 
         post = {
             'title': title,
             'user_id': user_id,
             'content': content,
-            'address': address
+            'address': address,
+            'image': img_64
         }
 
         result = db.jungle.insert_one(post)
@@ -133,15 +140,31 @@ def edit_post(id):
         title = request.form.get('title')
         content = request.form.get('content')
         address = request.form.get('address')
+        file = request.files['image']
 
-        db.jungle.update_one(
-            {'_id': ObjectId(id)},
-            {'$set': {
-                'title': title,
-                'content': content,
-                'address': address
-            }}
-        )
+        print(file)
+        if file:
+            img_bytes = file.read()
+            img_64 = base64.b64encode(img_bytes).decode('utf-8')
+
+            db.jungle.update_one(
+                {'_id': ObjectId(id)},
+                {'$set': {
+                    'title': title,
+                    'content': content,
+                    'address': address,
+                    'image': img_64
+                }}
+            )
+        else:
+            db.jungle.update_one(
+                {'_id': ObjectId(id)},
+                {'$set': {
+                    'title': title,
+                    'content': content,
+                    'address': address
+                }}
+            )
 
         flash('수정이 완료되었습니다.')
         return redirect(url_for('detail', post_id=id))

@@ -47,16 +47,16 @@ post
 
     <!-- flash 메시지 표시 영역 -->
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div class="flash-message">
-          {% for msg in messages %}
-            <div class="alert alert-info">{{ msg }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
+    {% if messages %}
+    <div class="flash-message">
+      {% for msg in messages %}
+      <div class="alert alert-info">{{ msg }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 
-    <form method="POST" action="{{ url_for('post_page') }}">
+    <form method="POST" action="{{ url_for('post_page') }}" enctype="multipart/form-data">
       <div class="form-group">
         <label class="form-label" for="title">식당 이름</label>
         <input class="form-input" type="text" id="title" name="title" autocomplete="off" placeholder="식당 이름을 입력해 주세요.">
@@ -68,9 +68,14 @@ post
       <div class="form-group">
         <label class="form-label" for="address">식당 위치</label>
         <div class="address-group">
-          <input class="address-input form-textarea" type="text" id="address" name="address" autocomplete="off" placeholder="주소를 입력해 주세요.">
+          <input class="address-input form-textarea" type="text" id="address" name="address" autocomplete="off"
+            placeholder="주소를 입력해 주세요.">
         </div>
       </div>
+      <div>
+        <input type="file" name="image">
+      </div>
+
       <button type="submit" class="btn btn-primary save-btn">저장</button>
     </form>
   </div>
