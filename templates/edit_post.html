@@ -37,6 +37,7 @@ post
 
   <!-- 구글폰트 -->
   <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <title>괴식쟁이들 수정 페이지</title>
   
 </head>
@@ -68,10 +69,9 @@ post
       <div class="form-group">
         <label class="form-label" for="address">식당 위치</label>
         <div class="address-group">
-          <input class="address-input" type="text" id="address" name="address" value="{{ post.address }}" autocomplete="off" placeholder="주소를 입력해 주세요.">
+          <input class="address-input form-textarea" type="text" id="address" name="address" value="{{ post.address }}" autocomplete="off" placeholder="주소를 입력해 주세요.">
         </div>
       </div>
-      <div class="map-box">지도</div>
       <button type="submit" class="btn btn-primary save-btn">수정</button>
     </form>
   </div>
