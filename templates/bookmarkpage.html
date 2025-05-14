@@ -1,42 +1,30 @@
-<!--
-즐겨찾기 목록 페이지
-사용자가 저장한 즐겨찾기 목록을 보여주는 페이지입니다.
-
-mainpage와 같은 ui
-
-
-user
-{
-  user 콜렉션과 동일 + 즐겨찾기 중첩으로 관리
-  bookmarks:[
-    ObjectId,
-    ObjectId,
-  ]
-}
--->
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>즐겨찾기 목록</title>
-  </head>
-
-<!-- 
-  
--->
-
-
-
-
-
-
-
+    <title>즐겨찾기</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bookmark.css') }}">
+    <style>
+        .card {
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
 <body>
     <div class="container">
         <h1>즐겨찾기 목록</h1>
-</div>
-</body>        
+        <div class="card-grid">
+            {% for post in posts %}
+                <a href="{{ url_for('detail', post_id=post._id) }}" class="card">
+                    <div class="card-title">{{ post.title }}</div>
+                    <div class="card-content">{{ post.content }}</div>
+                </a>
+            {% else %}
+                <p>북마크한 글이 없습니다.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
 </html>

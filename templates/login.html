@@ -1,16 +1,3 @@
-<!--
-
-세션 인증으로 로그인합니다.
-세션을 데이터베이스에 저장합니다.
-
-Users
-{
-  "_id": ObjectId,
-  "name": “김보아”,
-  “pw”: ******,
-}
-
--->
 <!Doctype html>
 <html lang="ko">
 
@@ -33,7 +20,7 @@ Users
     <!-- 구글폰트 -->
     <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_signup.css') }}">
 
 </head>
 
@@ -54,10 +41,10 @@ Users
             </div>
           
             <!-- 로그인 버튼 (submit) -->
-            <button type="submit" class="btn-login">로그인</button>
+            <button type="submit" class="button btn-login">로그인</button>
           
             <!-- 회원가입 버튼 / vs code에서 js로 인식해서 나는 오류 실행할 때 문제 없음-->
-            <button type="button" class="btn-signup"
+            <button type="button" class="button btn-signup"
                     onclick="location.href='{{ url_for('signup') }}'">
               회원가입
             </button>

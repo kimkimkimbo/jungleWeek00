@@ -1,0 +1,123 @@
+/* 공통 스타일 */
+body {
+    font-family: 'Malgun Gothic', sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container { /* 기존 메인 페이지 컨테이너와 이름 충돌 방지 */
+    display: none; /* 메인 페이지 컨테이너는 숨김 처리 (로그인/회원가입에선 안 보임) */
+}
+
+.login-container,
+.signup-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-title,
+.signup-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.login-form .input-group,
+.signup-form .input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.login-form label,
+.signup-form label {
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.login-form input,
+.signup-form input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.login-form input:focus,
+.signup-form input:focus {
+    border-color: #28a745;
+    outline: none;
+}
+
+.button {
+    display: inline-block;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+}
+
+/* 로그인 버튼 */
+.btn-login {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-login:hover {
+    background-color: #218838;
+}
+
+/* 회원가입 버튼 (폼 제출) */
+.btn-signup-submit {
+    background-color: #28a745; /* 파란색 계열 */
+    color: white;
+}
+
+.btn-signup-submit:hover {
+    background-color: #218838;
+}
+
+/* 회원가입 페이지 추가 스타일 */
+.signup-link {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+}
+
+.signup-link a {
+    color: #218838;
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    text-decoration: underline;
+}
+
+.error-message {
+    margin-top: 20px;
+    color: red;
+    text-align: center;
+    font-size: 14px;
+}
