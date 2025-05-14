@@ -243,10 +243,12 @@ comment
     </form>
     <div class="post-actions">
       <a href="{{ url_for('home') }}" class="btn btn-dark">목록</a>
-      <a href="{{ url_for('edit_post', id=post_info['_id']) }}" class="btn btn-primary">수정</a>
-      <form action="{{ url_for('delete_post', id=post_info['_id']) }}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-        <button type="submit" class="btn btn-danger">삭제</button>
-      </form>
+      {% if session['user_oid'] == post_info['user_id'] | string %}
+        <a href="{{ url_for('edit_post', id=post_info['_id']) }}" class="btn btn-primary">수정</a>
+        <form action="{{ url_for('delete_post', id=post_info['_id']) }}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+          <button type="submit" class="btn btn-danger">삭제</button>
+        </form>
+      {% endif %}
     </div>
 </form>
   </div>

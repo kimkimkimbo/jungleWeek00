@@ -99,9 +99,10 @@ def login():
 #게시물
 @app.route('/post', methods=['GET', 'POST'])
 def post_page():
-    user_id = session.get("user_id")
+    user_oid = session.get("user_oid")
+    print("테스트: ", dict(session))
     if request.method == 'POST':
-        if user_id is None:
+        if user_oid is None:
             flash('로그인이 필요합니다.')
             return redirect(url_for('post_page'))
 
@@ -111,7 +112,7 @@ def post_page():
 
         post = {
             'title': title,
-            'user_id': user_id,
+            'user_id': user_oid,
             'content': content,
             'address': address
         }
