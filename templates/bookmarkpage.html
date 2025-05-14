@@ -4,12 +4,14 @@
 
 mainpage와 같은 ui
 
-bookmark
+
+user
 {
-  "_id": ObjectId,
-  "user_id": ObjectId,
-  "post_id": ObjectId,
-  "created_at": ISODate
+  user 콜렉션과 동일 + 즐겨찾기 중첩으로 관리
+  bookmarks:[
+    ObjectId,
+    ObjectId,
+  ]
 }
 -->
 
@@ -21,6 +23,17 @@ bookmark
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>즐겨찾기 목록</title>
   </head>
+
+<!-- 
+  
+-->
+
+
+
+
+
+
+
 <body>
     <div class="container">
         <h1>즐겨찾기 목록</h1>
