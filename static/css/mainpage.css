@@ -121,6 +121,16 @@ body {
     margin-right: 4px;
 }
 
+<<<<<<< HEAD
+=======
+.corner-icon {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 20px;
+    color: #888;
+}
+>>>>>>> feature/merge
 
 
 .error-message {
@@ -128,4 +138,8 @@ body {
     color: red;
     text-align: center;
     font-size: 14px;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> feature/merge
