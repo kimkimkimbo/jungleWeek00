@@ -45,8 +45,8 @@
 
         <div class="card-grid" id="post-list">
             {% for info in info_list %}
-            <a href="{{ url_for('detail', post_id=info._id) }}">
               <div class="card" data-post-id="{{ info._id }}">
+                <a href="{{ url_for('detail', post_id=info._id) }}">
                 <div class="card-image"></div>
                 <div class="mark-btn" data-post-id="{{ info._id }}">☆</div>
                 <div class="card-title">{{ info.title }}</div>
