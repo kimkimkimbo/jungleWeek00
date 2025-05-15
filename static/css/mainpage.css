@@ -1,0 +1,138 @@
+/* 전체 body 스타일 (기존 스타일 유지) */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Malgun Gothic', sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* 페이지 전체 레이아웃 (기존 스타일 유지) */
+.container {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* 상단 헤더 */
+.header {
+    display: flex;
+    justify-content: space-between; /* 제목과 버튼 그룹을 양 끝으로 벌림 */
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.title {
+    font-size: 36px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* 버튼 그룹 (오른쪽 상단 배치) */
+.header .button-group {
+    display: flex; /* 버튼들을 가로로 나란히 배치 */
+    gap: 10px; /* 버튼 사이 간격 */
+}
+
+/* button 스타일 (기존 스타일 유지) */
+.button {
+    display: inline-block;
+    padding: 10px 15px; /* 버튼 패딩 줄임 */
+    font-size: 14px; /* 버튼 폰트 크기 줄임 */
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #fff; /* 흰색 글씨 */
+    background-color: #4CAF50; /* 초록색 배경 */
+    border: none;
+    border-radius: 8px; /* 둥근 모서리 살짝 줄임 */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 부드러운 색상 변화 */
+}
+
+.button:hover {
+    background-color: #45a049; /* 호버 시 조금 더 어두운 초록색 */
+}
+
+.search-box {
+    margin-bottom: 30px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* 카드 그리드 (기존 스타일 유지) */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+/* 카드 (기존 스타일 유지) */
+.card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 18px;
+    color:#333;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.card-image {
+    width: 100%;
+    height: 140px;
+    background-color: #eaeaea;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.mark-btn {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.card-likes {
+    font-size: 14px;
+    color: #555;
+}
+
+.like-icon {
+    margin-right: 4px;
+}
+
+.corner-icon {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-size: 20px;
+    color: #888;
+}
+
+
+.error-message {
+    margin-top: 20px;
+    color: red;
+    text-align: center;
+    font-size: 14px;
+}

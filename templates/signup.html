@@ -15,40 +15,46 @@ Users
 -->
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login_signup.css') }}">
 
-    <title>회원가입</title>
+  <title>회원가입</title>
 </head>
+
 <body>
-  <div class="container">
-    <form action="/signup" method="POST">
-      <table>
-        <tr>
-            <td><h2>회원가입</h2></td>
-        </tr>
+  <div class="signup-container">
+    <div class="signup-title">회원가입</div>
+    <form class="signup-form" action="/signup" method="POST">
+      <div class="input-group">
+        <label for="name">이름</label>
+        <input type="text" id="name" name="name" placeholder="이름">
+      </div>
 
-        <tr><td>이름</td></tr>
-        <tr><td><input type="text" name = "name"class="text"></td></tr>
+      <div class="input-group">
+        <label for="user_id">아이디</label>
+        <input type="text" id="user_id" name="user_id" placeholder="아이디">
+      </div>
 
-      
-        <tr><td>아이디</td></tr>
-        <tr><td><input type="text" name = "user_id" class="text"></td></tr>
+      <div class="input-group">
+        <label for="pw">비밀번호</label>
+        <input type="password" id="pw" name="pw" placeholder="비밀번호">
+      </div>
 
-        <tr><td>비밀번호</td></tr>
-        <tr><td><input type="password" name = "pw" class="text"></td></tr>
+      <button type="submit" class="button btn-signup-submit">회원가입</button>
 
-        <tr><td><input type="submit" value="회원가입" class="btn""></td></tr>
-        
-        </table>
-      </form>
-       <!-- 오류 메시지 표시 -->
-        {% if error %}
-          <div class="error-message" style="color: red;">
-            {{ error }}
-          </div>
-        {% endif %}
+      <div class="signup-link">
+        이미 계정이 있으신가요? <a href="{{ url_for('login') }}">로그인</a>
+      </div>
+    </form>
+    <!-- 오류 메시지 표시 -->
+    {% if error %}
+    <div class="error-message">
+      {{ error }}
+    </div>
+    {% endif %}
   </div>
 </body>
+</html>
