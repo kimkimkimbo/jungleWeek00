@@ -27,7 +27,7 @@
             <span class="title">괴식쟁이들</span>
             {% if session.get('user_id') %} <div class="button-group">
                 <button class="button bookmark-btn" onclick="location.href = '{{url_for('bookmark')}}'"> 즐겨찾기 </button>
-                <button class="button post-btn" onclick="location.href = '{{url_for('restaurant_page')}}'"> 글작성 </button>
+                <button class="button post-btn" onclick="location.href = '{{url_for('post_page')}}'"> 글작성 </button>
                 <button class="button logout-btn" onclick="location.href = '{{url_for('logout')}}'"> 로그아웃 </button>
             </div>
             {% else %}
