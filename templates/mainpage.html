@@ -47,7 +47,7 @@
             {% for info in info_list %}
               <div class="card" data-post-id="{{ info._id }}">
                 <a href="{{ url_for('detail', post_id=info._id) }}">
-                <div class="card-image"></div>
+                <img class="card-image" src="data:image/png;base64,{{ info.image }}" onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400';">
                 <div class="mark-btn" data-post-id="{{ info._id }}">☆</div>
                 <div class="card-title">{{ info.title }}</div>
             </a>

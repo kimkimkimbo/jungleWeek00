@@ -170,7 +170,7 @@ comment
     function show_post() {
       let post_html = `
       <div id="post-detail">
-        <img src="data:image/png;base64,{{ post_info['image'] }}" alt="이미지 없음" class="food-image">
+        <img src="data:image/png;base64,{{ post_info['image'] }}" onerror="this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400';" alt="이미지 없음" class="food-image">
         <ul class="info-list">
           <li>{{post_info.title}}</li>
           <li><span class="like-icon">&#128077;</span>90</li>
